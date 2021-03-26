@@ -36,4 +36,5 @@ def nearestbusstop():
 
 
 # reminder to set debug to false for production
-app.run("127.0.0.1", debug=True)
+if __name__ == "__main__":
+    app.run(debug=True)
