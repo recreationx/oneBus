@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="stylesheet" type=" text/css" href="{{ url_for('static',filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.0/font/bootstrap-icons.css">
 
 </head>
 
@@ -18,8 +19,8 @@
             <th> Bus Stop Code </th>
             <th> Description </th>
             <th> Road Name </th>
-            <th> Distance From Current Location </th>
-            <th> Coordinates </th>
+            <th> Distance Away (m) </th>
+            <th> Map </th>
         </tr>
         {% for i in results %}
         <tr>
@@ -27,7 +28,10 @@
             <td> {{ i['Description']}} </td>
             <td> {{ i['RoadName']}} </td>
             <td> {{ i['Distance']|float|round(2, 'floor')}} </td>
-            <td> {{ i['Latitude']|float|round(6, 'floor')}}, {{i['Longitude']|float|round(6, 'floor')}} </td>
+            <td>
+                <a href="https://www.google.com/maps/search/?api=1&query={{ i['Latitude'] }},{{ i['Longitude']}}"
+                    target="_blank"><i class="bi-map-fill"></i></a>
+            </td>
 
         </tr>
         {% endfor %}

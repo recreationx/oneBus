@@ -18,24 +18,26 @@ def haversine(lon1, lat1, lon2, lat2):
     return c * r
 
 
-def merge(left, right):
-    sortedarray = []
-    while len(left) > 0 and len(right) > 0:
-        if left[0]["Distance"] > right[0]["Distance"]:
-            elem = right.pop(0)
-        else:
-            elem = left.pop(0)
-        sortedarray.append(elem)
-    sortedarray = sortedarray + left + right
-    return sortedarray
-
-
-def mergeSort(arr):
-    if len(arr) > 1:
-        mid = len(arr) // 2
-        left = mergeSort(arr[:mid])
-        right = mergeSort(arr[mid:])
-        sortedarray = merge(left, right)
+def findDistance(arr):
+    def merge(left, right):
+        sortedarray = []
+        while len(left) > 0 and len(right) > 0:
+            if left[0]["Distance"] > right[0]["Distance"]:
+                elem = right.pop(0)
+            else:
+                elem = left.pop(0)
+            sortedarray.append(elem)
+        sortedarray = sortedarray + left + right
         return sortedarray
-    else:
-        return arr
+
+    def mergeSort(arr):
+        if len(arr) > 1:
+            mid = len(arr) // 2
+            left = mergeSort(arr[:mid])
+            right = mergeSort(arr[mid:])
+            sortedarray = merge(left, right)
+            return sortedarray
+        else:
+            return arr
+
+    return mergeSort(arr)
