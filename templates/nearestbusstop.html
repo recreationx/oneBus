@@ -64,7 +64,7 @@
                     <button id='search' type="button" class="btn btn-primary mb-2">Search</button>
                 </div>
                 <div class="col-auto">
-                    <button id='retrievelocation' onclick="geoFindMe()" type="submit"
+                    <button id='retrievelocation' onclick="geoFindMe()" type="button"
                         class="btn btn-secondary mb-2">Retrieve
                         location</button>
                 </div>
@@ -135,7 +135,7 @@
                 dataType: 'json',
                 success: function (response) {
                     console.log("Nearby bus stop search successful.");
-                    $('#results').replaceWith(response.data);
+                    $('#results').empty().append(response.data);
 
                 },
                 error: function (error) {
