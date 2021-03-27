@@ -134,8 +134,8 @@
                 type: 'POST',
                 dataType: 'json',
                 success: function (response) {
-                    console.log(response);
-                    $('#results').append(response.data);
+                    console.log("Nearby bus stop search successful.");
+                    $('#results').replaceWith(response.data);
 
                 },
                 error: function (error) {
