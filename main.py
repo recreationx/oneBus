@@ -1,8 +1,9 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, jsonify
 from datastore import Datastore
+from algorithms import haversine, mergeSort
 
-data = Datastore("busdata.db")
-data.init_all()
+datastore = Datastore("busdata.db")
+datastore.init_all()
 
 app = Flask(__name__)
 
@@ -22,19 +23,26 @@ def nearestbusstop():
 
     TODO: implement AJAX for static loading
     """
-    conn = data.get_conn()
-    cur = conn.cursor()
-    cur.execute(
-        """
-        SELECT * FROM busstops
-        """
-    )
-    a = cur.fetchall()
-    print(a)
+    if request.method == "POST":
+        latitude = request.form["latitudetext"]
+        longitude = request.form["longitudetext"]
+        stops_coord = datastore.get_records("get_coord")
+        distances = []
+        for coords in stops_coord:
+            stop_dict = dict(coords)
+            stop_dict["Distance"] = haversine(
+                float(longitude),
+                float(latitude),
+                coords["Longitude"],
+                coords["Latitude"],
+            )
+            distances.append(stop_dict)
+        distances = mergeSort(distances)
+        return jsonify({"data": render_template("temp.html", results=distances[:10])})
 
     return render_template("nearestbusstop.html")
 
 
 # reminder to set debug to false for production
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()

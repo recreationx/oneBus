@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" type=" text/css" href="{{ url_for('static',filename='css/bootstrap.min.css') }}">
+
+</head>
+
+<body>
+    <div class="alert alert-primary" role="alert">
+        Your nearest bus stop is {{ results[0]['Description'] }} at {{results[0]['RoadName']}}!
+    </div>
+    <table class='table'>
+        <tr>
+            <th> Bus Stop Code </th>
+            <th> Description </th>
+            <th> Road Name </th>
+            <th> Distance From Current Location </th>
+            <th> Coordinates </th>
+        </tr>
+        {% for i in results %}
+        <tr>
+            <td> {{ i['BusStopCode']}} </td>
+            <td> {{ i['Description']}} </td>
+            <td> {{ i['RoadName']}} </td>
+            <td> {{ i['Distance']|float|round(2, 'floor')}} </td>
+            <td> {{ i['Latitude']|float|round(6, 'floor')}}, {{i['Longitude']|float|round(6, 'floor')}} </td>
+
+        </tr>
+        {% endfor %}
+
+    </table>
+
+</body>
+
+</html>

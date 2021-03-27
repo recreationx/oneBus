@@ -125,6 +125,12 @@ data_insert = {
     """,
 }
 
+query_table = {
+    "get_coord": """
+    SELECT * FROM busstops;
+    """,
+}
+
 
 class Datastore:
     def __init__(self, uri):
@@ -144,6 +150,24 @@ class Datastore:
         conn = sqlite3.connect(self.uri)
         conn.row_factory = sqlite3.Row
         return conn
+
+    def get_records(self, command, param=None):
+        """[summary]
+
+        Args:
+            command ([type]): [description]
+            param ([type], optional): [description]. Defaults to None.
+
+        Returns:
+            [type]: [description]
+        """
+        conn = self.get_conn()
+        cur = conn.cursor()
+        if param is None:
+            cur.execute(query_table[command])
+        else:
+            cur.execute(query_table[command], param)
+        return cur.fetchall()
 
     def distance_parser(self, raw_distance):
         """[HELPER METHOD]
