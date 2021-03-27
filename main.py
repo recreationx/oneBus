@@ -23,7 +23,11 @@ def nearestbusstop():
 
     TODO: implement AJAX for static loading
     """
-    if request.method == "POST":
+    if (
+        request.method == "POST"
+        and request.form["latitudetext"]
+        and request.form["longitudetext"]
+    ):
         latitude = request.form["latitudetext"]
         longitude = request.form["longitudetext"]
         stops_coord = datastore.get_records("get_coord")
