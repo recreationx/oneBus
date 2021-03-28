@@ -108,29 +108,6 @@
 
     <script>
 
-        let map;
-        let panorama;
-
-        function initMap() {
-            const fenway = { lat: 1.3645489085281655, lng: 103.99150933969776 };
-
-            map = new google.maps.Map(document.getElementById("map"), {
-                center: fenway,
-                zoom: 14,
-            });
-            panorama = new google.maps.StreetViewPanorama(
-                document.getElementById("pano"),
-                {
-                    position: fenway,
-                    pov: {
-                        heading: 34,
-                        pitch: 10,
-                    },
-                }
-            );
-            map.setStreetView(panorama);
-        }
-
         function geoFindMe() {
 
             const status = document.querySelector('#status');
@@ -148,8 +125,6 @@
                 latitudetext.value = `${latitude}`;
                 longitudetext.value = `${longitude}`;
                 searchBus();
-                map.setCenter({ lat: latitude, lng: longitude });
-                panorama.setPosition({ lat: latitude, lng: longitude })
 
             }
 
@@ -179,10 +154,6 @@
                 dataType: 'json',
                 success: function (response) {
                     console.log("Nearby bus stop search successful.");
-                    latitude = parseFloat(latitudetext.value);
-                    longitude = parseFloat(longitudetext.value);
-                    map.setCenter({ lat: latitude, lng: longitude });
-                    panorama.setPosition({ lat: latitude, lng: longitude });
                     $('#results').empty().append(response.data);
 
                 },
@@ -192,17 +163,6 @@
             });
         };
     </script>
-
-    <script
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBD-JGnC7ClCJ_3z65gZOZpo153oG7w8_U&callback=initMap&libraries=&v=weekly"
-        async>
-
-        </script>
-
-
-
-
-
 </body>
 
 </html>
