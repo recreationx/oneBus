@@ -5,7 +5,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" type=" text/css" href="{{ url_for('static',filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/index.css') }}">
     <link rel="icon" type="image/png" href="{{ url_for('static',filename='images/favicon.ico') }}" />
 
     <title>oneBus</title>
@@ -32,7 +33,7 @@
 
 
 
-    <div class="container" style="margin-top:25px">
+    <div class="container">
         <nav aria-label="breadcrumb bg-dark">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item active" aria-current="page">Home</li>
@@ -40,7 +41,7 @@
         </nav>
         <div class="row d-flex justify-content-center">
             <div class="col-sm">
-                <div class="card" style="width: auto; margin: 2px;">
+                <div class="card">
                     <img src="../static/images/busstop.jpg" class="card-img-top" alt="...">
                     <div class="card-body">
                         <h5 class="card-title">Nearest Bus Stop</h5>
@@ -50,7 +51,7 @@
                 </div>
             </div>
             <div class="col-sm">
-                <div class="card" style="width: auto; margin: 2px;">
+                <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Distance calculator</h5>
                         <p class="card-text">Calculate the distance between bus stops.</p>
@@ -59,7 +60,7 @@
                 </div>
             </div>
             <div class="col-sm">
-                <div class="card" style="width: auto; margin:2px;">
+                <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Fare calculator</h5>
                         <p class="card-text">Calculate fare for a given ride.</p>
