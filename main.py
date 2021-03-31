@@ -42,7 +42,7 @@ def nearestbusstop():
             )
             distances.append(stop_dict)
         distances = findDistance(distances)
-        return jsonify({"data": render_template("temp.html", results=distances[:10])})
+        return jsonify({"data": render_template("temp.html", results=distances)})
 
     return render_template("nearestbusstop.html")
 
