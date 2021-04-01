@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, jsonify
 from datastore import Datastore
 from algorithms import haversine, findDistance
+from checks import isFloat
 
 datastore = Datastore("busdata.db")
 datastore.init_all()
@@ -27,22 +28,30 @@ def nearestbusstop():
         request.method == "POST"
         and request.form["latitudetext"]
         and request.form["longitudetext"]
+        and request.form["recordmax"]
     ):
         latitude = request.form["latitudetext"]
         longitude = request.form["longitudetext"]
-        stops_coord = datastore.get_records("get_coord")
-        distances = []
-        for coords in stops_coord:
-            stop_dict = dict(coords)
-            stop_dict["Distance"] = haversine(
-                float(longitude),
-                float(latitude),
-                coords["Longitude"],
-                coords["Latitude"],
+        recordmax = request.form["recordmax"]
+        if isFloat(latitude) and isFloat(longitude) and isFloat(recordmax):
+            recordmax = int(
+                round(float(recordmax))
+            )  # error handling jic that recordmax is a float
+            stops_coord = datastore.get_records("get_coord")
+            distances = []
+            for coords in stops_coord:
+                stop_dict = dict(coords)
+                stop_dict["Distance"] = haversine(
+                    float(longitude),
+                    float(latitude),
+                    coords["Longitude"],
+                    coords["Latitude"],
+                )
+                distances.append(stop_dict)
+            distances = findDistance(distances)
+            return jsonify(
+                {"data": render_template("temp.html", results=distances[:recordmax])}
             )
-            distances.append(stop_dict)
-        distances = findDistance(distances)
-        return jsonify({"data": render_template("temp.html", results=distances)})
 
     return render_template("nearestbusstop.html")
 
