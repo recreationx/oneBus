@@ -56,6 +56,11 @@ def nearestbusstop():
     return render_template("nearestbusstop.html")
 
 
+@app.route("/help", methods=["GET", "POST"])
+def help():
+    return render_template("help.html")
+
+
 # reminder to set debug to false for production
 if __name__ == "__main__":
     app.run(debug=True)
