@@ -22,7 +22,7 @@ def nearestbusstop():
 
     1. Take in given coordinate
 
-    TODO: implement AJAX for static loading
+    TODO: implement AJAX for static loading DONE
     """
     if (
         request.method == "POST"

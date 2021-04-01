@@ -2,9 +2,17 @@ from math import radians, cos, sin, asin, sqrt
 
 
 def haversine(lon1, lat1, lon2, lat2):
-    """
-    Calculate the great circle distance between two points
+    """Calculate the great circle distance between two points
     on the earth (specified in decimal degrees)
+
+    Args:
+        lon1 (float): Longitude for first coordinate
+        lat1 (float): Latitude for first coordinate
+        lon2 (float): Longitude for second coordinate
+        lat2 (float): Latitude for second coordinate
+
+    Returns:
+        int: Distance between given coordinates
     """
     # convert decimal degrees to radians
     lon1, lat1, lon2, lat2 = map(radians, [lon1, lat1, lon2, lat2])
@@ -19,6 +27,12 @@ def haversine(lon1, lat1, lon2, lat2):
 
 
 def findDistance(arr):
+    """Sort given array according to distances
+
+    Args:
+        arr (list): A lists of bus stops and its info
+    """
+
     def merge(left, right):
         sortedarray = []
         while len(left) > 0 and len(right) > 0:

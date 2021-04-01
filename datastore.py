@@ -152,14 +152,15 @@ class Datastore:
         return conn
 
     def get_records(self, command, param=None):
-        """[summary]
+        """Retrieve records using key from query_table
 
         Args:
-            command ([type]): [description]
-            param ([type], optional): [description]. Defaults to None.
+            command (str): A key in query_table
+            param (tup/list, optional): parameters to pass in.
+            Defaults to None.
 
         Returns:
-            [type]: [description]
+            arr: Array of rows
         """
         conn = self.get_conn()
         cur = conn.cursor()
