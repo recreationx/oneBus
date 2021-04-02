@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, jsonify
+from flask import Flask, render_template, request, jsonify
 from datastore import Datastore
 from algorithms import haversine, findDistance
 from checks import isFloat
@@ -56,9 +56,19 @@ def nearestbusstop():
     return render_template("nearestbusstop.html")
 
 
+@app.route("/farecalculator", methods=["GET", "POST"])
+def farecalc():
+    return render_template("farecalculator.html")
+
+
 @app.route("/help", methods=["GET", "POST"])
 def help():
     return render_template("help.html")
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return "The resource could not be found."
 
 
 # reminder to set debug to false for production

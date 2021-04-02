@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" type=" text/css" href="{{ url_for('static',filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.0/font/bootstrap-icons.css">
+    <link rel="icon" type="image/png" href="{{ url_for('static',filename='images/favicon.ico') }}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+    <title>oneBus</title>
+</head>
+
+<body>
+
+    <div class="container animate__animated animate__slideInLeft" id="leftpanel"
+        style="height: 100%; width: 350px; position:fixed; background-color: #2f3136; z-index: 1; top: 0; left: 0; overflow-x: hidden; padding-top:20px;">
+        <a href="/" style="font-size: 14px;">Go back to home</a>
+        <br>
+        <br>
+        <h3><b>Trip Details</b></h3>
+        <br>
+        <form method="POST">
+            <div class="form-group">
+                <label for="faretype">Fare Type</label>
+                <select class="custom-select" id="faretype">
+                    <option>Select Fare Type</option>
+                    <option>Adult</option>
+                    <option>Student</option>
+                    <option>Senior Citizen</option>
+                    <option>Workfare Transport Concession Scheme</option>
+                    <option>Person with disabilities</option>
+                </select>
+            </div>
+            <div class="form-group">
+
+                <label for="busserviceno">Bus Service Number</label>
+                <select class="custom-select" id="busserviceno">
+                    <option selected>Select Bus Service No.</option>
+                    {% for i in busservices %}
+                    <option>{{ i }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="direction">Direction</label>
+                <select class="custom-select" id="direction">
+                    <option selected>Select Direction</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="boardingat">Boarding at</label>
+                <select class="custom-select" id="boardingat">
+                    <option selected>Select Bus Stop</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="alightingat">Alighting at</label>
+                <select class="custom-select" id="alightingat">
+                    <option selected>Select Bus Stop</option>
+                </select>
+            </div>
+            <button class="btn btn-primary btn-block" type="submit">Add trip to journey</button>
+        </form>
+    </div>
+
+    <div id="rightpanel" style="margin-left: 350px; padding-top: 65px;">
+        <div class="container animate__animated animate__fadeIn">
+            <h3><b>Results</b></h3>
+        </div>
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
+        crossorigin="anonymous"></script>
+
+</body>
+
+
+</html>
