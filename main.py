@@ -58,7 +58,38 @@ def nearestbusstop():
 
 @app.route("/farecalculator", methods=["GET", "POST"])
 def farecalc():
-    return render_template("farecalculator.html")
+    if request.method == "GET":
+        busservices = datastore.get_records("get_busservices")
+        return render_template("farecalculator.html", busservices=busservices)
+
+    if request.method == "POST":
+        if request.form["type"] == "getDirections":
+            serviceno = request.form["value"]
+            directions = datastore.get_records("get_busserviceinfo", (serviceno,))
+            directions_list = []
+            for direction in directions:
+                originstop = datastore.get_records(
+                    "get_desc_from_code", (direction["OriginCode"],)
+                )[0]["Description"]
+                deststop = datastore.get_records(
+                    "get_desc_from_code", (direction["DestinationCode"],)
+                )[0]["Description"]
+                if direction["Direction"] == "1":
+                    text = "".join(["FROM ", originstop, " TO ", deststop])
+                else:
+                    text = "".join(["FROM ", deststop, " TO ", originstop])
+
+                directions_list.append(
+                    {
+                        "value": (
+                            direction["OriginCode"],
+                            direction["DestinationCode"],
+                        ),
+                        "text": text,
+                    }
+                )
+
+            return jsonify(data=directions_list)
 
 
 @app.route("/help", methods=["GET", "POST"])
