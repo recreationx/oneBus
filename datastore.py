@@ -129,17 +129,6 @@ query_table = {
     "get_coord": """
     SELECT * FROM busstops;
     """,
-    "get_busservices": """
-    SELECT ServiceNo FROM busservices;
-    """,
-    "get_busserviceinfo": """
-    SELECT ServiceNo, Direction, OriginCode, DestinationCode FROM servicesinfo
-    WHERE ServiceNo = ?;
-    """,
-    "get_desc_from_code": """
-    SELECT BusStopCode, Description FROM busstops
-    WHERE BusStopCode = ?;
-    """,
 }
 
 
@@ -158,15 +147,8 @@ class Datastore:
         Returns:
             conn: A sqlite3 Connection object connected to stored URI
         """
-
-        def dict_factory(cursor, row):
-            d = {}
-            for idx, col in enumerate(cursor.description):
-                d[col[0]] = row[idx]
-            return d
-
         conn = sqlite3.connect(self.uri)
-        conn.row_factory = dict_factory
+        conn.row_factory = sqlite3.Row
         return conn
 
     def get_records(self, command, param=None):
