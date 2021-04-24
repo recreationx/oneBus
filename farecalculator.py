@@ -67,9 +67,32 @@ class FareCalculator:
         return displayBoarding
 
     def getAlightingAt(self, direction, serviceno, boardingno):
+        """Generates a list of bus stop names for a given bus service
+        and direction truncated to a given boarding stop
+
+        Args:
+            direction (int): direction value either 1 or 2
+            serviceno (int): Bus Service No
+            boardingno (int): Boarding stop number on the route
+
+        Returns:
+            list: Populated list of able-to-alight stations after boarding station
+        """
         return self.getBoardingAt(direction, serviceno)[int(boardingno) :]
 
     def calculateFare(self, faretype, direction, serviceno, boardingno, alightingno):
+        """[summary]
+
+        Args:
+            faretype (str)): Fare type
+            direction (int): direction value either 1 or 2
+            serviceno (int): Bus Service No
+            boardingno (int): Boarding stop number on the route
+            alightingno (int): Alighting stop number on the route
+
+        Returns:
+            displayFare (list): Calculated results to feed to frontend
+        """
         categorymapping = {
             "SBST": "get_expressfare",
             "INDUSTRIAL": "get_expressfare",
