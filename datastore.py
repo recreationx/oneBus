@@ -149,7 +149,7 @@ query_table = {
     WHERE ServiceNo = ?;
     """,
     "get_distance": """
-    SELECT Distance FROM routeinfo 
+    SELECT Distance FROM routeinfo
     WHERE ServiceNo = ? AND Direction = ? AND StopSequence = ?;
     """,
     "get_expressfare": """
