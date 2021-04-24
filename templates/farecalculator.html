@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="height: 100%;">
 
 <head>
     <meta charset="utf-8">
@@ -13,64 +13,66 @@
     <title>oneBus</title>
 </head>
 
-<body>
+<body style="height: 100%;">
 
-    <div class="container animate__animated animate__slideInLeft" id="leftpanel"
-        style="height: 100%; width: 350px; position:fixed; background-color: #2f3136; z-index: 1; top: 0; left: 0; overflow-x: hidden; padding-top:20px;">
-        <a href="/" style="font-size: 14px;">Go back to home</a>
-        <br>
-        <br>
-        <h3><b>Trip Details</b></h3>
-        <br>
-        <form method="POST">
-            <div class="form-group">
-                <label for="faretype">Fare Type</label>
-                <select class="custom-select" id="faretype">
-                    <option>Select Fare Type</option>
-                    <option>Adult</option>
-                    <option>Student</option>
-                    <option>Senior Citizen</option>
-                    <option>Workfare Transport Concession Scheme</option>
-                    <option>Person with disabilities</option>
-                </select>
+    <div class="container-fluid h-100" id="leftpanel">
+        <div class="row h-100">
+            <div class="col-md-3 pl-3.5 bg-dark animate__animated animate__slideInLeft">
+                <a href="/" style="font-size: 14px;">Go back to home</a>
+                <br>
+                <br>
+                <h3><b>Trip Details</b></h3>
+                <br>
+                <form method="POST" id="farecalc">
+                    <div class="form-group">
+                        <label for="faretype">Fare Type</label>
+                        <select class="custom-select" id="faretype" name="faretype">
+                            <option selected>Select Fare Type</option>
+                            <option value='0'>Adult</option>
+                            <option value='1'>Student</option>
+                            <option value='2'>Senior Citizen</option>
+                            <option value='3'>Workfare Transport Concession Scheme</option>
+                            <option value='4'>Person with disabilities</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="busserviceno">Bus Service Number</label>
+                        <select class="custom-select" id="busserviceno" name="busserviceno" onchange="getDirections()">
+                            <option selected>Select Bus Service No.</option>
+                            {% for i in busservices %}
+                            <option>{{ i['ServiceNo'] }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="direction">Direction</label>
+                        <select class="custom-select" id="direction" name="direction" onchange="getBoardingAt()">
+                            <option selected>Select Direction</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="boardingat">Boarding at</label>
+                        <select class="custom-select" id="boardingat" name="boardingat" onchange="getAlightingAt()">
+                            <option selected>Select Bus Stop</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="alightingat">Alighting at</label>
+                        <select class="custom-select" id="alightingat" name="alightingat">
+                            <option selected>Select Bus Stop</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary btn-block" type="button" onclick="addJourney()" >Add trip to journey</button>
+                </form>
             </div>
-            <div class="form-group">
+            <div class="col" id="rightpanel">
+                <div class="container mt-5 animate__animated animate__fadeIn">
+                    <h3><b>Results</b></h3>
+                    <div id="results"></div>
+                </div>
 
-                <label for="busserviceno">Bus Service Number</label>
-                <select class="custom-select" id="busserviceno">
-                    <option selected>Select Bus Service No.</option>
-                    {% for i in busservices %}
-                    <option>{{ i }}</option>
-                    {% endfor %}
-                </select>
             </div>
-            <div class="form-group">
-                <label for="direction">Direction</label>
-                <select class="custom-select" id="direction">
-                    <option selected>Select Direction</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="boardingat">Boarding at</label>
-                <select class="custom-select" id="boardingat">
-                    <option selected>Select Bus Stop</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="alightingat">Alighting at</label>
-                <select class="custom-select" id="alightingat">
-                    <option selected>Select Bus Stop</option>
-                </select>
-            </div>
-            <button class="btn btn-primary btn-block" type="submit">Add trip to journey</button>
-        </form>
-    </div>
-
-    <div id="rightpanel" style="margin-left: 350px; padding-top: 65px;">
-        <div class="container animate__animated animate__fadeIn">
-            <h3><b>Results</b></h3>
         </div>
-
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"
@@ -79,6 +81,105 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
         crossorigin="anonymous"></script>
+
+    <script>
+        // reset options - fix FF unintended behaviour
+        window.onload = document.getElementById("farecalc").reset();
+
+        function getDirections() {
+            $('#direction').find('option').not(':first').remove();
+            $('#boardingat').find('option').not(':first').remove();
+            $('#alightingat').find('option').not(':first').remove();
+            $.ajax({
+                url: '/farecalculator',
+                data: { 'type': 'getDirections', 'value': $('#busserviceno').val() },
+                type: 'POST',
+                dataType: 'json',
+                success: function (response) {
+                    $.each(response.data, function (key, value) {
+                        $("#direction").append('<option value=' + value['value'] + '>' + value['text'] + '</option>');
+                    });
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        };
+        
+        function getBoardingAt() {
+            $('#boardingat').find('option').not(':first').remove();
+            $('#alightingat').find('option').not(':first').remove();
+            
+            $.ajax({
+                url: '/farecalculator',
+                data: { 'type': 'getBoardingAt', 'direction': $('#direction').val(), 'bsNo': $('#busserviceno').val()},
+                type: 'POST',
+                dataType: 'json',
+                success: function (response) {
+                    $.each(response.data, function (key, value) {
+                        $("#boardingat").append('<option value=' + value['value'] + '>' + value['text'] + '</option>');
+                    });
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        };
+        
+        function getAlightingAt() {
+            $('#alightingat').find('option').not(':first').remove();
+            
+            $.ajax({
+                url: '/farecalculator',
+                data: { 'type': 'getAlightingAt', 'direction': $('#direction').val(), 'bsNo': $('#busserviceno').val(), 'boardingNo': $('#boardingat').val()},
+                type: 'POST',
+                dataType: 'json',
+                success: function (response) {
+                    $.each(response.data, function (key, value) {
+                        $("#alightingat").append('<option value=' + value['value'] + '>' + value['text'] + '</option>');
+                    });
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        };
+        
+        function predictFare() {
+            $.ajax({
+                url: '/farecalculator',
+                data: { 'type': 'predictFare', },
+                type: 'POST',
+                dataType: 'json',
+                success: function (response) {
+                    $.each(response.data, function (key, value) {
+                        $("#alightingat").append('<option value=' + value['value'] + '>' + value['text'] + '</option>');
+                    });
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        };
+        
+        function addJourney() {
+            console.log($('#farecalc').serialize())
+            $.ajax({
+                url: '/farecalculator',
+                data: { 'type': 'addJourney', 'faretype': $('#faretype').val(), 'direction': $('#direction').val(), 'busserviceno': $('#busserviceno').val(), 'boardingat': $('#boardingat').val(), 'alightingat': $('#alightingat').val() },
+                type: 'POST',
+                dataType: 'json',
+                success: function (response) {
+                    $('#results').empty().append(response.data);
+                    console.log(response.data);
+
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        };
+    </script>
 
 </body>
 

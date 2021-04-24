@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.18.3/dist/bootstrap-table.min.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+
+</head>
+
+<body>
+    <h1>{{ results[0]['t'] }}</h1>
+    <table class='table' style="margin-top: 10px;" data-toggle="table" data-pagination='true' data-search='true'>
+        <thead>
+            <tr>
+                <th data-sortable="true"> Service </th>
+                <th data-sortable="true"> Board </th>
+                <th data-sortable="true"> Alight </th>
+                <th data-sortable="true"> Distance (km) </th>
+                <th> Fare (cents) </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in results %}
+            <tr>
+                <td> {{ i['Service']}} </td>
+                <td> {{ i['Board']}} </td>
+                <td> {{ i['Alight']}} </td>
+                <td> {{ i['Distance'] }} </td>
+                <td>
+                    {{ i['Fare'] }}
+                </td>
+
+            </tr>
+            {% endfor %}
+
+
+        </tbody>
+    </table>
+
+    <script src="https://unpkg.com/bootstrap-table@1.18.3/dist/bootstrap-table.min.js"></script>
+
+</body>
+
+</html>
