@@ -2,9 +2,11 @@ from flask import Flask, render_template, request, jsonify
 from datastore import Datastore
 from algorithms import haversine, findDistance
 from checks import isFloat
+from farecalculator import FareCalculator
 
 datastore = Datastore("busdata.db")
 datastore.init_all()
+farecalculator = FareCalculator(datastore)
 
 app = Flask(__name__)
 
@@ -65,128 +67,40 @@ def farecalc():
     if request.method == "POST":
         if request.form["type"] == "getDirections":
             serviceno = request.form["value"]
-            directions = datastore.get_records("get_busserviceinfo", (serviceno,))
-            direction_val = 0
-            directions_list = []
-            for direction in directions:
-                originstop = datastore.get_records(
-                    "get_desc_from_code", (direction["OriginCode"],)
-                )[0]["Description"]
-                deststop = datastore.get_records(
-                    "get_desc_from_code", (direction["DestinationCode"],)
-                )[0]["Description"]
-                text = "".join(["FROM ", originstop, " TO ", deststop])
-                if direction["Direction"] == 1:
-                    direction_val = 1
-                elif direction["Direction"] == 2:
-                    direction_val = 2
 
-                directions_list.append(
-                    {
-                        "value": (direction_val,),
-                        "text": text,
-                    }
-                )
-
-            print(directions_list)
-
-            return jsonify(data=directions_list)
+            return jsonify(data=farecalculator.getDirections(serviceno))
 
         if request.form["type"] == "getBoardingAt":
-            boardingdir = request.form["direction"]
-            bsNo = request.form["bsNo"]
-            results = datastore.get_records(
-                "get_busroutes",
-                (
-                    bsNo,
-                    boardingdir,
-                ),
-            )
-            print(results)
-            boardingAtList = []
-            for i in results:
-                boardingAtList.append(
-                    {
-                        "value": (i["StopSequence"],),
-                        "text": datastore.get_records(
-                            "get_desc_from_code", (i["BusStopCode"],)
-                        )[0]["Description"],
-                    }
-                )
+            direction = request.form["direction"]
+            serviceno = request.form["bsNo"]
 
-            return jsonify(data=boardingAtList)
+            return jsonify(data=farecalculator.getBoardingAt(direction, serviceno))
 
         if request.form["type"] == "getAlightingAt":
-            boardingdir = request.form["direction"]
-            bsNo = request.form["bsNo"]
+            direction = request.form["direction"]
+            serviceno = request.form["bsNo"]
             boardingno = request.form["boardingNo"]
-            results = datastore.get_records(
-                "get_busroutes",
-                (
-                    bsNo,
-                    boardingdir,
-                ),
-            )
-            print(results)
-            boardingAtList = []
-            for i in results:
-                boardingAtList.append(
-                    {
-                        "value": (i["StopSequence"],),
-                        "text": datastore.get_records(
-                            "get_desc_from_code", (i["BusStopCode"],)
-                        )[0]["Description"],
-                    }
-                )
 
-            return jsonify(data=boardingAtList[int(boardingno) :])
+            return jsonify(
+                data=farecalculator.getAlightingAt(direction, serviceno, boardingno)
+            )
 
         if request.form["type"] == "addJourney":
             faretype = request.form["faretype"]
-            busserviceno = request.form["busserviceno"]
+            serviceno = request.form["busserviceno"]
             direction = request.form["direction"]
-            boardingat = request.form["boardingat"]
-            alightingat = request.form["alightingat"]
-            categorymapping = {
-                "SBST": "get_expressfare",
-                "INDUSTRIAL": "get_expressfare",
-                "CITY_LINK": "get_expressfare",
-                "TRUNK": "get_trunkfare",
-                "EXPRESS": "get_expressfare",
-                "FEEDER": "feederfare",
-            }
-            faremapping = {
-                "0": "AdultCardFare",
-                "1": "SeniorCardFare",
-                "2": "StudentCardFare",
-                "3": "WorkfareCardFare",
-                "4": "DisabilitesCardFare",
-            }
-            print(faretype, busserviceno, direction, boardingat, alightingat)
-            category = categorymapping[
-                datastore.get_records("get_category", (busserviceno,))[0]["Category"]
-            ]
-            boardingdist = datastore.get_records(
-                "get_distance", (busserviceno, direction, boardingat)
-            )[0]["Distance"]
-            alightingdist = datastore.get_records(
-                "get_distance", (busserviceno, direction, alightingat)
-            )[0]["Distance"]
-            dist = float(alightingdist) - float(boardingdist)
-            fare = datastore.get_records(category, (dist,))[0][faremapping[faretype]]
-
-            results = [
-                {
-                    "Service": busserviceno,
-                    "Distance": dist,
-                    "Board": boardingat,
-                    "Alight": alightingat,
-                    "Fare": fare,
-                }
-            ]
+            boardingno = request.form["boardingat"]
+            alightingno = request.form["alightingat"]
 
             return jsonify(
-                {"data": render_template("journeyrender.html", results=results)}
+                {
+                    "data": render_template(
+                        "journeyrender.html",
+                        results=farecalculator.calculateFare(
+                            faretype, direction, serviceno, boardingno, alightingno
+                        ),
+                    )
+                }
             )
 
 

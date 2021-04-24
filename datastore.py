@@ -193,6 +193,25 @@ class Datastore:
         conn.row_factory = dict_factory
         return conn
 
+    def get_record(self, command, param=None):
+        """Retrieve a single records using key from query_table
+
+        Args:
+            command (str): A key in query_table
+            param (tup/list, optional): parameters to pass in.
+            Defaults to None.
+
+        Returns:
+            arr: Array of rows
+        """
+        conn = self.get_conn()
+        cur = conn.cursor()
+        if param is None:
+            cur.execute(query_table[command])
+        else:
+            cur.execute(query_table[command], param)
+        return cur.fetchone()
+
     def get_records(self, command, param=None):
         """Retrieve records using key from query_table
 
