@@ -1,12 +1,13 @@
 from flask import Flask, render_template, request, jsonify
 from datastore import Datastore
-from algorithms import haversine, findDistance
-from checks import isFloat
-from farecalculator import FareCalculator
+from checks import Validator
+from features import FareCalculator, NearestBus
 
 datastore = Datastore("busdata.db")
 datastore.init_all()
+nearestbus = NearestBus(datastore)
 farecalculator = FareCalculator(datastore)
+validator = Validator()
 
 app = Flask(__name__)
 
@@ -26,36 +27,21 @@ def nearestbusstop():
 
     TODO: implement AJAX for static loading DONE
     """
+    
+    if request.method == "GET":
+        return render_template("nearestbusstop.html")
+        
     if (
         request.method == "POST"
-        and request.form["latitudetext"]
-        and request.form["longitudetext"]
-        and request.form["recordmax"]
+        and validator.paramCheckExist(['latitudetext', 'longitudetext', 'recordmax'], request.form.keys())
     ):
         latitude = request.form["latitudetext"]
         longitude = request.form["longitudetext"]
         recordmax = request.form["recordmax"]
-        if isFloat(latitude) and isFloat(longitude) and isFloat(recordmax):
-            recordmax = int(
-                round(float(recordmax))
-            )  # error handling jic that recordmax is a float
-            stops_coord = datastore.get_records("get_coord")
-            distances = []
-            for coords in stops_coord:
-                stop_dict = dict(coords)
-                stop_dict["Distance"] = haversine(
-                    float(longitude),
-                    float(latitude),
-                    coords["Longitude"],
-                    coords["Latitude"],
-                )
-                distances.append(stop_dict)
-            distances = findDistance(distances)
+        if validator.isFloat(latitude) and validator.isFloat(longitude) and validator.isFloat(recordmax):
             return jsonify(
-                {"data": render_template("temp.html", results=distances[:recordmax])}
+                {"data": render_template("temp.html", results=nearestbus.getBusStops(latitude, longitude, recordmax))}
             )
-
-    return render_template("nearestbusstop.html")
 
 
 @app.route("/farecalculator", methods=["GET", "POST"])
