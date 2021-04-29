@@ -62,7 +62,8 @@
                             <option selected>Select Bus Stop</option>
                         </select>
                     </div>
-                    <button class="btn btn-primary btn-block" type="button" onclick="addJourney()" >Add trip to journey</button>
+                    <button class="btn btn-primary btn-block" type="button" onclick="addJourney()">Calculate
+                        Fare</button>
                 </form>
             </div>
             <div class="col" id="rightpanel">
@@ -92,7 +93,7 @@
             $('#alightingat').find('option').not(':first').remove();
             $.ajax({
                 url: '/farecalculator',
-                data: { 'type': 'getDirections', 'value': $('#busserviceno').val() },
+                data: { 'type': 'getDirections', 'serviceno': $('#busserviceno').val() },
                 type: 'POST',
                 dataType: 'json',
                 success: function (response) {
@@ -105,14 +106,14 @@
                 }
             });
         };
-        
+
         function getBoardingAt() {
             $('#boardingat').find('option').not(':first').remove();
             $('#alightingat').find('option').not(':first').remove();
-            
+
             $.ajax({
                 url: '/farecalculator',
-                data: { 'type': 'getBoardingAt', 'direction': $('#direction').val(), 'bsNo': $('#busserviceno').val()},
+                data: { 'type': 'getBoardingAt', 'direction': $('#direction').val(), 'serviceno': $('#busserviceno').val() },
                 type: 'POST',
                 dataType: 'json',
                 success: function (response) {
@@ -125,13 +126,13 @@
                 }
             });
         };
-        
+
         function getAlightingAt() {
             $('#alightingat').find('option').not(':first').remove();
-            
+
             $.ajax({
                 url: '/farecalculator',
-                data: { 'type': 'getAlightingAt', 'direction': $('#direction').val(), 'bsNo': $('#busserviceno').val(), 'boardingNo': $('#boardingat').val()},
+                data: { 'type': 'getAlightingAt', 'direction': $('#direction').val(), 'serviceno': $('#busserviceno').val(), 'boardingat': $('#boardingat').val() },
                 type: 'POST',
                 dataType: 'json',
                 success: function (response) {
@@ -144,24 +145,8 @@
                 }
             });
         };
-        
-        function predictFare() {
-            $.ajax({
-                url: '/farecalculator',
-                data: { 'type': 'predictFare', },
-                type: 'POST',
-                dataType: 'json',
-                success: function (response) {
-                    $.each(response.data, function (key, value) {
-                        $("#alightingat").append('<option value=' + value['value'] + '>' + value['text'] + '</option>');
-                    });
-                },
-                error: function (error) {
-                    console.log(error);
-                }
-            });
-        };
-        
+
+
         function addJourney() {
             console.log($('#farecalc').serialize())
             $.ajax({
@@ -171,7 +156,6 @@
                 dataType: 'json',
                 success: function (response) {
                     $('#results').empty().append(response.data);
-                    console.log(response.data);
 
                 },
                 error: function (error) {

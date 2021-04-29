@@ -81,20 +81,20 @@ def farecalculate():
 
     if request.method == "POST":
         if request.form["type"] == "getDirections":
-            serviceno = request.form["value"]
+            serviceno = request.form["serviceno"]
 
             return jsonify(data=farecalculator.getDirections(serviceno))
 
         if request.form["type"] == "getBoardingAt":
             direction = request.form["direction"]
-            serviceno = request.form["bsNo"]
+            serviceno = request.form["serviceno"]
 
             return jsonify(data=farecalculator.getBoardingAt(direction, serviceno))
 
         if request.form["type"] == "getAlightingAt":
             direction = request.form["direction"]
-            serviceno = request.form["bsNo"]
-            boardingno = request.form["boardingNo"]
+            serviceno = request.form["serviceno"]
+            boardingno = request.form["boardingat"]
 
             return jsonify(
                 data=farecalculator.getAlightingAt(direction, serviceno, boardingno)
@@ -110,7 +110,7 @@ def farecalculate():
             return jsonify(
                 {
                     "data": render_template(
-                        "journeyrender.html",
+                        "faretable.html",
                         results=farecalculator.calculateFare(
                             faretype, direction, serviceno, boardingno, alightingno
                         ),

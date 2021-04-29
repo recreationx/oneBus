@@ -2,6 +2,10 @@ from algorithms import haversine, findDistance
 
 
 class Feature:
+    """
+    Parent class for any new feature
+    """
+
     def __init__(self, database):
         """Initialize a feature requiring db access with a given
         Datastore URI
@@ -14,6 +18,18 @@ class Feature:
 
 class NearestBus(Feature):
     def getBusStops(self, latitude, longitude, recordmax):
+        """Retrieve a sorted list of bus stops from a given latitude
+        and longitude, truncated to a specified recordmax length
+
+        Args:
+            latitude (str/int): Latitude value
+            longitude (str/int): Longitude value
+            recordmax (str/int): Maximum number of records to display
+
+        Returns:
+            list: List of bus stops truncated to recordmax length
+            for display on front-end
+        """
         recordmax = int(
             round(float(recordmax))
         )  # error handling jic that recordmax is a float
@@ -66,8 +82,8 @@ class FareCalculator(Feature):
         and direction
 
         Args:
-            direction (int): direction value either 1 or 2
-            serviceno (int): Bus Service No
+            direction (str): direction value either 1 or 2
+            serviceno (str): Bus Service No
 
         Returns:
             displayBoarding (list): Populated bus stop list for display on frontend
@@ -97,9 +113,9 @@ class FareCalculator(Feature):
         and direction truncated to a given boarding stop
 
         Args:
-            direction (int): direction value either 1 or 2
-            serviceno (int): Bus Service No
-            boardingno (int): Boarding stop number on the route
+            direction (str): direction value either 1 or 2
+            serviceno (str): Bus Service No
+            boardingno (str): Boarding stop number on the route
 
         Returns:
             list: Populated list of able-to-alight stations after boarding station
@@ -112,14 +128,15 @@ class FareCalculator(Feature):
 
         Args:
             faretype (str)): Fare type
-            direction (int): direction value either 1 or 2
-            serviceno (int): Bus Service No
-            boardingno (int): Boarding stop number on the route
-            alightingno (int): Alighting stop number on the route
+            direction (str): direction value either 1 or 2
+            serviceno (str): Bus Service No
+            boardingno (str): Boarding stop number on the route
+            alightingno (str): Alighting stop number on the route
 
         Returns:
             displayFare (list): Calculated results to feed to frontend
         """
+
         categorymapping = {
             "SBST": "get_expressfare",
             "INDUSTRIAL": "get_expressfare",
@@ -146,13 +163,17 @@ class FareCalculator(Feature):
         )["Distance"]
         dist = float(alightingdist) - float(boardingdist)
         fare = self.db.get_record(category, (dist,))[faremapping[faretype]]
+        alightingname = self.getBoardingAt(direction, serviceno)[int(alightingno)][
+            "text"
+        ]
+        boardingname = self.getBoardingAt(direction, serviceno)[int(boardingno)]["text"]
 
         displayFare = [
             {
                 "Service": serviceno,
                 "Distance": dist,
-                "Board": boardingno,
-                "Alight": alightingno,
+                "Board": boardingname,
+                "Alight": alightingname,
                 "Fare": fare,
             }
         ]
