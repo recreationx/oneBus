@@ -1,33 +1,36 @@
 from algorithms import haversine, findDistance
 
+
 class Feature:
     def __init__(self, database):
-        """Initialize a feature requiring db access with a given 
+        """Initialize a feature requiring db access with a given
         Datastore URI
 
         Args:
             database (instance): An instance of Datastore
         """
         self.db = database
-    
+
+
 class NearestBus(Feature):
     def getBusStops(self, latitude, longitude, recordmax):
         recordmax = int(
-                round(float(recordmax))
-            )  # error handling jic that recordmax is a float
+            round(float(recordmax))
+        )  # error handling jic that recordmax is a float
         stops_coord = self.db.get_records("get_coord")
         distances = []
         for coords in stops_coord:
             stop_dict = dict(coords)
             stop_dict["Distance"] = haversine(
-                    float(longitude),
-                    float(latitude),
-                    coords["Longitude"],
-                    coords["Latitude"],
-                )
+                float(longitude),
+                float(latitude),
+                coords["Longitude"],
+                coords["Latitude"],
+            )
             distances.append(stop_dict)
         distances = findDistance(distances)
         return distances[:recordmax]
+
 
 class FareCalculator(Feature):
     def getDirections(self, serviceno):
@@ -104,7 +107,8 @@ class FareCalculator(Feature):
         return self.getBoardingAt(direction, serviceno)[int(boardingno) :]
 
     def calculateFare(self, faretype, direction, serviceno, boardingno, alightingno):
-        """[summary]
+        """Generate a list of a single dictionary containing fare information
+        to feed to front end
 
         Args:
             faretype (str)): Fare type

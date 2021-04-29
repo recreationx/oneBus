@@ -1,21 +1,12 @@
 class Validator:
     """
     A data-validation class to clean/check all values in requests
-    
-    TODO:
-    - basic SQLi cleaning
-    - strict type checking
-    - data validation (value too large etc)
     """
 
     def __init__(self):
         pass
-        
-    def paramCheckExist(self, requiredParams, paramsDict):
-        return requiredParams == list(paramsDict)
-        
-        
-    def isFloat(self, value):
+
+    def isFloat(self, *args):
         """Check if a value is a number (float)
 
         Args:
@@ -24,9 +15,18 @@ class Validator:
         Returns:
             bool: True or False
         """
-        try:
-            float(value)
-        except ValueError:
-            print(f"isFloat: {value} is not a valid floating point value.")
-            return False
+        for value in args:
+            try:
+                float(value)
+            except ValueError:
+                print(f"isFloat: {value} is not a valid floating point value.")
+                return False
+        return True
+
+    def inputCheck(self, paramsDict):
+        for value in paramsDict.values():
+            if len(value.replace(" ", "")) == 0:
+                return False
+            if not self.isFloat(value):
+                return False
         return True

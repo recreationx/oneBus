@@ -11,7 +11,13 @@
 </head>
 
 <body>
+    {% if error %}
 
+    <div class="alert alert-danger" role="alert">
+        {{ error }}
+    </div>
+    {% endif %}
+    {% if results %}
     <div class="alert alert-success" role="alert">
         Your nearest bus stop is {{ results[0]['Description'] }} ({{ results[0]['BusStopCode'] }}) at
         {{results[0]['RoadName']}}
@@ -109,6 +115,7 @@
             mapInfo.innerHTML = '<i>Currently displaying: ' + desc + '</i>';
         };
     </script>
+    {% endif %}
 
 </body>
 

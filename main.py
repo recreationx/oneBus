@@ -3,10 +3,15 @@ from datastore import Datastore
 from checks import Validator
 from features import FareCalculator, NearestBus
 
+# Initialize datastore
 datastore = Datastore("busdata.db")
 datastore.init_all()
+
+# Initialize app features
 nearestbus = NearestBus(datastore)
 farecalculator = FareCalculator(datastore)
+
+# Initialize validation
 validator = Validator()
 
 app = Flask(__name__)
@@ -23,29 +28,53 @@ def nearestbusstop():
     Coordinate can be retrieved automatically or
     manually entered
 
-    1. Take in given coordinate
-
-    TODO: implement AJAX for static loading DONE
+    NOTE: Rendering a external HTML file is a workaround
+    to prevent the error from Google Map API where it could
+    not find the element to load into upon DOM load completion
+    (aka bus stop search not carried out thus no map can exist)
     """
-    
+
     if request.method == "GET":
         return render_template("nearestbusstop.html")
-        
-    if (
-        request.method == "POST"
-        and validator.paramCheckExist(['latitudetext', 'longitudetext', 'recordmax'], request.form.keys())
-    ):
-        latitude = request.form["latitudetext"]
-        longitude = request.form["longitudetext"]
-        recordmax = request.form["recordmax"]
-        if validator.isFloat(latitude) and validator.isFloat(longitude) and validator.isFloat(recordmax):
+
+    if request.method == "POST":
+        if validator.inputCheck(request.form):
+            latitude = request.form["latitudetext"]
+            longitude = request.form["longitudetext"]
+            recordmax = request.form["recordmax"]
             return jsonify(
-                {"data": render_template("temp.html", results=nearestbus.getBusStops(latitude, longitude, recordmax))}
+                {
+                    "data": render_template(
+                        "bustable.html",
+                        results=nearestbus.getBusStops(latitude, longitude, recordmax),
+                    )
+                }
+            )
+        else:
+            return jsonify(
+                {
+                    "data": render_template(
+                        "bustable.html",
+                        error="Please input all fields and ensure that they are valid numbers.",
+                    )
+                }
             )
 
 
 @app.route("/farecalculator", methods=["GET", "POST"])
-def farecalc():
+def farecalculate():
+    """Calculate fare given fare type, direction, boarding stop,
+    alighting stop and service number
+
+    NOTE:
+    1. No need for data validation because no manual input
+    is needed
+    2. Due to insufficient data for some fare types (SBST, CITY LINK),
+    the search will sometimes not work and database search will
+    return None. In this case, please search another service.
+    Currently unknown fare types defaults to EXPRESS fare.
+
+    """
     if request.method == "GET":
         busservices = datastore.get_records("get_busservices")
         return render_template("farecalculator.html", busservices=busservices)

@@ -194,7 +194,7 @@ class Datastore:
         return conn
 
     def get_record(self, command, param=None):
-        """Retrieve a single records using key from query_table
+        """Retrieve a single record using key from query_table
 
         Args:
             command (str): A key in query_table
