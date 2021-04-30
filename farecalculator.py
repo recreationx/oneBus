@@ -99,7 +99,7 @@ class FareCalculator:
             "CITY_LINK": "get_expressfare",
             "TRUNK": "get_trunkfare",
             "EXPRESS": "get_expressfare",
-            "FEEDER": "feederfare",
+            "FEEDER": "get_feederfare",
         }
         faremapping = {
             "0": "AdultCardFare",
@@ -118,6 +118,7 @@ class FareCalculator:
             "get_distance", (serviceno, direction, alightingno)
         )["Distance"]
         dist = float(alightingdist) - float(boardingdist)
+
         fare = self.db.get_record(category, (dist,))[faremapping[faretype]]
 
         displayFare = [

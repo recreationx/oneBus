@@ -161,8 +161,7 @@ query_table = {
     WHERE ? BETWEEN MinDistance AND MaxDistance;
     """,
     "get_feederfare": """
-    SELECT * FROM feederfare
-    WHERE ? BETWEEN MinDistance AND MaxDistance;
+    SELECT * FROM feederfare;
     """,
 }
 
