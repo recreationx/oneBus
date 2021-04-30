@@ -9,7 +9,7 @@
   <p align="center">
     a bus stop toolkit for singapore
     <br />
-    <a href="https://github.com/recreationx/oneBus"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/recreationx/oneBus/tree/main/docs"><strong>Explore the docs »</strong></a>
     <br />
     <br />
     <a href="https://one-bus.herokuapp.com/">View Demo</a>
