@@ -49,5 +49,59 @@
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
+The main focus of this project is to provide a easy-to-use tool to find info about buses in Singapore.
 
-WIP.
+### Built With
+* Bootstrap
+* JQuery
+* Flask
+
+## Getting Started
+The project is built in Python 3.9.2, but is more likely compatitable with older Python 3 versions. 
+
+### Prerequisites
+
+1. Clone the repo
+* ```sh
+  git clone https://github.com/recreationx/oneBus.git
+  ```
+
+2. It is recommend to run this within a virtual environment so as to not affect existing Python installations.
+* ```sh
+  virtualenv env
+  ```
+  and activate the new virtual environment.
+
+3. Install required packages
+*  ```sh
+   pip install -r requirements.txt
+   ```
+
+4. A Google Maps JS API key is provided in `templates/bustable.html` for demo purposes. using your own is recommended.
+
+5. Run project
+* ```sh
+  python main.py
+  ```
+
+## Usage
+
+Usage is intuitive. Check out the demo to try out. 
+
+## Roadmap
+
+See the [open issues](https://github.com/recreationx/oneBus/issues) for a list of proposed features (and known issues).\
+
+## Contributing
+
+Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## License
+
+NIL
