@@ -66,11 +66,11 @@ The project is built in Python 3.9.2, but is more likely compatitable with older
   git clone https://github.com/recreationx/oneBus.git
   ```
 
-2. It is recommend to run this within a virtual environment so as to not affect existing Python installations.
+2. It is recommend to run this within a virtual environment so as to not affect existing Python installations and activate the new      virtual environment (command differs depending on OS)
   ```sh
   virtualenv env
+  source /bin/env/activate
   ```
-  and activate the new virtual environment.
 
 3. Install required packages
   ```sh
