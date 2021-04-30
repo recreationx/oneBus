@@ -57,7 +57,7 @@ The main focus of this project is to provide a easy-to-use tool to find info abo
 * Flask
 
 ## Getting Started
-The project is built in Python 3.9.2, but is more likely compatitable with older Python 3 versions. 
+The project is built in Python 3.9.2, but is most likely also compatitable with older Python 3 versions. 
 
 ### Prerequisites
 
