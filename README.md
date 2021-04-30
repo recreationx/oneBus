@@ -62,25 +62,25 @@ The project is built in Python 3.9.2, but is more likely compatitable with older
 ### Prerequisites
 
 1. Clone the repo
-   ```sh
+  ```sh
   git clone https://github.com/recreationx/oneBus.git
   ```
 
 2. It is recommend to run this within a virtual environment so as to not affect existing Python installations.
- ```sh
+  ```sh
   virtualenv env
   ```
   and activate the new virtual environment.
 
 3. Install required packages
-   ```sh
-   pip install -r requirements.txt
-   ```
+  ```sh
+  pip install -r requirements.txt
+  ```
 
 4. A Google Maps JS API key is provided in `templates/bustable.html` for demo purposes. using your own is recommended.
 
 5. Run project
- ```sh
+  ```sh
   python main.py
   ```
 
