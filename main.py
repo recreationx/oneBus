@@ -108,16 +108,28 @@ def farecalculate():
             boardingno = request.form["boardingat"]
             alightingno = request.form["alightingat"]
 
-            return jsonify(
-                {
-                    "data": render_template(
-                        "faretable.html",
-                        results=farecalculator.calculateFare(
-                            faretype, direction, serviceno, boardingno, alightingno
-                        ),
-                    )
-                }
-            )
+            if validator.selectCheck(
+                faretype, serviceno, direction, boardingno, alightingno
+            ):
+                return jsonify(
+                    {
+                        "data": render_template(
+                            "faretable.html",
+                            results=farecalculator.calculateFare(
+                                faretype, direction, serviceno, boardingno, alightingno
+                            ),
+                        )
+                    }
+                )
+            else:
+                return jsonify(
+                    {
+                        "data": render_template(
+                            "faretable.html",
+                            error="Please select a valid option for all fields.",
+                        )
+                    }
+                )
 
 
 @app.route("/help", methods=["GET", "POST"])

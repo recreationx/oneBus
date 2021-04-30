@@ -30,3 +30,13 @@ class Validator:
             if not self.isFloat(value):
                 return False
         return True
+
+    def selectCheck(self, *options):
+        """Check if any selected option is of default
+        value
+
+        Returns:
+            bool: True if default value does not exist
+            and False if default value exists
+        """
+        return not any("default" in option for option in options)

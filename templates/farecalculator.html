@@ -27,7 +27,7 @@
                     <div class="form-group">
                         <label for="faretype">Fare Type</label>
                         <select class="custom-select" id="faretype" name="faretype">
-                            <option selected>Select Fare Type</option>
+                            <option value='default' selected>Select Fare Type</option>
                             <option value='0'>Adult</option>
                             <option value='1'>Student</option>
                             <option value='2'>Senior Citizen</option>
@@ -38,7 +38,7 @@
                     <div class="form-group">
                         <label for="busserviceno">Bus Service Number</label>
                         <select class="custom-select" id="busserviceno" name="busserviceno" onchange="getDirections()">
-                            <option selected>Select Bus Service No.</option>
+                            <option value='default' selected>Select Bus Service No.</option>
                             {% for i in busservices %}
                             <option>{{ i['ServiceNo'] }}</option>
                             {% endfor %}
@@ -47,19 +47,19 @@
                     <div class="form-group">
                         <label for="direction">Direction</label>
                         <select class="custom-select" id="direction" name="direction" onchange="getBoardingAt()">
-                            <option selected>Select Direction</option>
+                            <option value='default' selected>Select Direction</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="boardingat">Boarding at</label>
                         <select class="custom-select" id="boardingat" name="boardingat" onchange="getAlightingAt()">
-                            <option selected>Select Bus Stop</option>
+                            <option value='default' selected>Select Boarding Bus Stop</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="alightingat">Alighting at</label>
-                        <select class="custom-select" id="alightingat" name="alightingat">
-                            <option selected>Select Bus Stop</option>
+                        <select class="custom-select" id="alightingat" name="alightingat    ">
+                            <option value='default' selected>Select Alighting Bus Stop</option>
                         </select>
                     </div>
                     <button class="btn btn-primary btn-block" type="button" onclick="addJourney()">Calculate

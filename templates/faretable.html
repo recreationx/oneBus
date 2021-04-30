@@ -11,6 +11,13 @@
 </head>
 
 <body>
+    {% if error %}
+    <div class="alert alert-danger" role="alert">
+        {{ error }}
+    </div>
+        
+    {% endif %}
+    {% if results %}
     <h1>{{ results[0]['t'] }}</h1>
     <table class='table' style="margin-top: 10px;" data-toggle="table">
         <thead>
@@ -39,6 +46,7 @@
 
         </tbody>
     </table>
+    {% endif %}
 
     <script src="https://unpkg.com/bootstrap-table@1.18.3/dist/bootstrap-table.min.js"></script>
 
