@@ -143,7 +143,7 @@ class FareCalculator(Feature):
             "CITY_LINK": "get_expressfare",
             "TRUNK": "get_trunkfare",
             "EXPRESS": "get_expressfare",
-            "FEEDER": "feederfare",
+            "FEEDER": "get_feederfare",
         }
         faremapping = {
             "0": "AdultCardFare",
