@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, jsonify
 from datastore import Datastore
-from checks import Validator
+from validation import Validator
 from features import FareCalculator, NearestBus
 
 # Initialize datastore
