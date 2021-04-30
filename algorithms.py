@@ -27,7 +27,8 @@ def haversine(lon1, lat1, lon2, lat2):
 
 
 def findDistance(arr):
-    """Sort given array according to distances
+    """Sort given array according to distances using merge
+    sort algorithm
 
     Args:
         arr (list): A lists of bus stops and its info

@@ -73,6 +73,7 @@ def farecalculate():
     the search will sometimes not work and database search will
     return None. In this case, please search another service.
     Currently unknown fare types defaults to EXPRESS fare.
+    3. Did not directly pass variables into functions for more readability
 
     """
     if request.method == "GET":
