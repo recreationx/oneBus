@@ -90,7 +90,7 @@ Usage is intuitive. Check out the demo to try out.
 
 ## Roadmap
 
-See the [open issues](https://github.com/recreationx/oneBus/issues) for a list of proposed features (and known issues).\
+See the [open issues](https://github.com/recreationx/oneBus/issues) for a list of proposed features (and known issues).
 
 ## Contributing
 
